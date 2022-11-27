@@ -1,16 +1,24 @@
-boolean test=true;
-
-
-
-int l, h, DX, DY, L, H, i, j, DADO, t=0, x=0, y=0, mx=0, my=0;
-float r, g, b;
-int sensores[]=new int[10];
-boolean giro=false, nuevapieza=false;
+//variables dimensionales
+int l, h, DX, DY, L, H;
+int P[][]=new int[4][4];
 int M[][]= new int [10][20];
-int P[][]= new int [4] [4];
+
+// variables usuario;
+int mx=0,my=0,t=0;
+float r=0, g=0, b=0;
+boolean nuevapieza=false; 
+
+// variables pruebas
+boolean test=true;
+boolean giro=false;
+int sensores[]={1,2,0,0,0,0,0,0,0,0};
+
+
+
+
 
 void setup () {
-  frameRate(2);
+  frameRate(8);
   size (600, 600);
   background (255);
   DX = (width* 25)/ 100;
@@ -21,20 +29,22 @@ void setup () {
   h = H / 20; /* L --> long, H --> high */
 
   limpiar();
-  limpiarpieza();
+//  limpiarpieza();
   nuevapieza=true;
 }
 
 
 void draw () {
   //  pantalla ();
+  
   background(0);
-  fondo();
+ 
+  fondo();  
+  
   if (test==true) Jugador();
+    
   sensados();
   mensajes();
-
-  
 }
 
 
@@ -44,7 +54,7 @@ void sensados(){
     textSize(30);
     for(int c=0;c<10;c++)
     {
-      if (test==true) text("T",DX+5+l*c,h*21);
+      if (test==true) text("T",DX+5+l*c,h*(21-sensores[c]));
       else text("F",DX+5+l*c,h*21);
     }
    popMatrix();
@@ -59,27 +69,21 @@ void mensajes()
 
 
 void limpiar () {
-  for (i=0; i<20; i++) {
-    for (j=0; j<10; j++) {
+  
+  for (int i=0; i<20; i++) {
+    for (int j=0; j<10; j++) {
       M[j][i] = 0;
     }
   }
 }
 
-void limpiarpieza() {
-  for (i=0; i<4; i++) {
-    for (j=0; j<4; j++) {
-      P[j][i] = 0;
-    }
-  }
-}
 
 
 void fondo() {
   fill (155);
   quad (DX-20, DY-20, DX+L+20, DY-20, DX+L+20, DY+H+20, DX-20, DY+H+20);
-  for (i = 0; i < 10*l; i = i +l) { /* for para dibujar cada columna*/
-    for (j=0; j<20 *h; j = j + h) {/* for para dibujar cada fila */
+  for (int i = 0; i < 10*l; i = i +l) { /* for para dibujar cada columna*/
+    for (int j=0; j<20 *h; j = j + h) {/* for para dibujar cada fila */
       if (M [i/l] [j/h] == 0) { /* si es == 0 es porque no hay una pieza ahi. */
         fill (0);
         stroke (130);
@@ -92,23 +96,20 @@ void fondo() {
 void Jugador() {
   if (nuevapieza==true)
   {
-    DADO = int (random (0, 7));
+    int DADO = int (random (0, 7));
+    DADO=0;
     nuevapieza=false;
 
     switch (DADO) {
-    case 0: // pieza en L E1(naranja)
+      
+      case 0: // pieza en L E1(naranja)
 
       P[1][0] = 1;
       P[1][1] = 1;
       P[1][2] = 1;
       P[2][2] = 1;
-      r = 255;
-      g = 164;
-      b = 32;
-      break;
-
-      //// pieza L invertida (azul)
-    case 1: // E1
+      
+      case 1: // E1
       P[2][0] = 1;
       P[2][1] = 1;
       P[2][2] = 1;
@@ -117,8 +118,8 @@ void Jugador() {
       g = 0;
       b = 255;
       break;
-
-      // Z Invertida roja
+  
+    // Z Invertida roja
     case 2: // pieza Z invertida E1(roja)
       P[0][1] = 1;
       P[1][1] = 1;
@@ -130,7 +131,7 @@ void Jugador() {
       break;
 
 
-      // T violeta
+    // T violeta
     case 3: // pieza T E1(violeta)
       P[0][1] = 1;
       P[1][1] = 1;
@@ -142,7 +143,7 @@ void Jugador() {
       break;
 
 
-      // pieza | (palito) E1(celeste)
+    // pieza | (palito) E1(celeste)
     case 4:
       P[1][0] = 1;
       P[1][1] = 1;
@@ -154,7 +155,7 @@ void Jugador() {
       break;
 
 
-      // pieza cuadrado # E1 (es un cuadrado el hastag) (amarrillo)
+    // pieza cuadrado # E1 (es un cuadrado el hastag) (amarrillo)
     case 5:
       P[1][0] = 1;
       P[2][0] = 1;
@@ -166,8 +167,12 @@ void Jugador() {
       break;
     }
   }
+  
   dibujapieza(r, g, b);
+    
+  
   t++;
+
 }
 
 void dibujapieza(float rojo, float verde, float azul) {
@@ -176,19 +181,23 @@ void dibujapieza(float rojo, float verde, float azul) {
   {
     pushMatrix();
 
-    translate(l*mx, h*t);
     if (giro==true)
     {
       rotate(90);
       giro=false;
     }
-    for (i=0; i<4; i++) {
-      for (j=0; j<4; j++) {
-
-        if (P[i][j]==1) {
+    translate(l*mx, h*t);
+    
+    for (int i=0; i<4; i++) {
+      for (int j=0; j<4; j++) {
+        fill(255);
+        if (P[i][j]==0){
+              text("0",DX+l*i,h*j);
+        }else{
           fill(rojo, verde, azul);
-        }
-        rect(DX, DY, l*i, h*j);
+          text("1",DX+l*i,h*j);
+        }  
+        //rect(DX, DY, l*i, h*j);
       }
     }
     popMatrix();
