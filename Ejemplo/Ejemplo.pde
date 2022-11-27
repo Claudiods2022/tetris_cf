@@ -4,14 +4,14 @@ int P[][]=new int[4][4];
 int M[][]= new int [10][20];
 
 // variables usuario;
-int mx=0,my=0,t=0;
-float r=0, g=0, b=0;
+int mx=0,t=0;
+float r=0, g=0, b=0,vy=1;
 boolean nuevapieza=false; 
 
 // variables pruebas
 boolean test=true;
 boolean giro=false;
-int sensores[]={1,2,0,0,0,0,0,0,0,0};
+int sensores[]={0,0,0,0,0,0,0,0,0,0};
 
 
 
@@ -94,8 +94,8 @@ void fondo() {
 void Jugador() {
   if (nuevapieza==true)
   {
-    int DADO = int (random (0, 7));
-    DADO=0;
+    int DADO = int (random (0, 5));
+    
     nuevapieza=false;
 
     switch (DADO) {
@@ -188,7 +188,7 @@ void dibujapieza(float rojo, float verde, float azul) {
       rotate(90);
       giro=false;
     }
-    translate(l*mx, h*t);
+    translate(l*mx, h*t*vy);
     
     for (int i=0; i<4; i++) {
       for (int j=0; j<4; j++) {
@@ -202,6 +202,7 @@ void dibujapieza(float rojo, float verde, float azul) {
         }  
       }
     }
+    
     popMatrix();
   } else {
     t=-1;
@@ -214,7 +215,7 @@ void keyPressed() {
   if ((key =='w') || (key =='W')) giro=true;
   else if ((key =='A') || (key =='a')) mx--;
   else if ((key =='d') || (key =='D')) mx++;
-  else if ((key=='s') || (key=='s')) my=2;
+  else if ((key=='s') || (key=='s')) vy=2;
   delimitadores();
 }
 
