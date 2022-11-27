@@ -29,22 +29,20 @@ void setup () {
   h = H / 20; /* L --> long, H --> high */
 
   limpiar();
-//  limpiarpieza();
   nuevapieza=true;
 }
 
 
 void draw () {
   //  pantalla ();
-  
-  background(0);
- 
-  fondo();  
-  
-  if (test==true) Jugador();
-    
-  sensados();
-  mensajes();
+  if(test==true)
+  {
+    background(0);
+    fondo();  
+    if (test==true) Jugador();
+    sensados();
+    mensajes();
+  }
 }
 
 
@@ -55,7 +53,7 @@ void sensados(){
     for(int c=0;c<10;c++)
     {
       if (test==true) text("T",DX+5+l*c,h*(21-sensores[c]));
-      else text("F",DX+5+l*c,h*21);
+      else text("F",DX+5+l*c,h*l*c,h*(21-sensores[c]));
     }
    popMatrix();
 }
@@ -108,6 +106,10 @@ void Jugador() {
       P[1][1] = 1;
       P[1][2] = 1;
       P[2][2] = 1;
+      r= 0;
+      g = 0;
+      b = 255;
+      break;
       
       case 1: // E1
       P[2][0] = 1;
@@ -177,7 +179,7 @@ void Jugador() {
 
 void dibujapieza(float rojo, float verde, float azul) {
 
-  if (h*t<=513)
+  if (h*t<=h*18)
   {
     pushMatrix();
 
@@ -191,13 +193,13 @@ void dibujapieza(float rojo, float verde, float azul) {
     for (int i=0; i<4; i++) {
       for (int j=0; j<4; j++) {
         fill(255);
-        if (P[i][j]==0){
+        if (P[i][j]==0)
+        {
               text("0",DX+l*i,h*j);
         }else{
-          fill(rojo, verde, azul);
-          text("1",DX+l*i,h*j);
+              fill(rojo, verde, azul);
+              text("1",DX+l*i,h*j);
         }  
-        //rect(DX, DY, l*i, h*j);
       }
     }
     popMatrix();
@@ -212,7 +214,7 @@ void keyPressed() {
   if ((key =='w') || (key =='W')) giro=true;
   else if ((key =='A') || (key =='a')) mx--;
   else if ((key =='d') || (key =='D')) mx++;
-
+  else if ((key=='s') || (key=='s')) my=2;
   delimitadores();
 }
 
