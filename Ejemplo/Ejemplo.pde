@@ -44,7 +44,8 @@ void sensados(){
     textSize(30);
     for(int c=0;c<10;c++)
     {
-      text(1,DX+5+l*c,h*21);
+      if (test==true) text("T",DX+5+l*c,h*21);
+      else text("F",DX+5+l*c,h*21);
     }
    popMatrix();
 }
