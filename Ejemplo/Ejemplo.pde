@@ -1,12 +1,16 @@
+boolean test=true;
 
-int l, h, DX, DY, L, H, i, j, R,t=0, x=0, y=0, mx=0, my=0;
-float r,g,b;
-boolean giro=false;  
+
+
+int l, h, DX, DY, L, H, i, j, DADO, t=0, x=0, y=0, mx=0, my=0;
+float r, g, b;
+int sensores[]=new int[10];
+boolean giro=false, nuevapieza=false;
 int M[][]= new int [10][20];
 int P[][]= new int [4] [4];
 
 void setup () {
-  frameRate(1);
+  frameRate(2);
   size (600, 600);
   background (255);
   DX = (width* 25)/ 100;
@@ -15,28 +19,40 @@ void setup () {
   H = height - 2 * DY; /* pantalla azul rect grande */
   l = L / 10; /* ancho y largo de cuadrados chiquitos */
   h = H / 20; /* L --> long, H --> high */
-  
+
   limpiar();
   limpiarpieza();
-  
+  nuevapieza=true;
 }
 
 
 void draw () {
-//  pantalla ();
+  //  pantalla ();
   background(0);
   fondo();
-  Jugador();
-  
+  if (test==true) Jugador();
+  sensados();
   mensajes();
+
   
-  t++;
+}
+
+
+void sensados(){
+   pushMatrix();
+    fill(255);
+    textSize(30);
+    for(int c=0;c<10;c++)
+    {
+      text(1,DX+5+l*c,h*21);
+    }
+   popMatrix();
 }
 
 void mensajes()
 {
-   textSize(30);
-   text("("+mx+","+(h*t)+")",0,20); 
+  textSize(30);
+  text("("+mx+","+(h*t)+")", 0, 20);
 }
 
 
@@ -49,12 +65,12 @@ void limpiar () {
   }
 }
 
-void limpiarpieza(){
-    for (i=0; i<4; i++) {
-      for (j=0; j<4; j++) {
-        P[j][i] = 0;
-      }
+void limpiarpieza() {
+  for (i=0; i<4; i++) {
+    for (j=0; j<4; j++) {
+      P[j][i] = 0;
     }
+  }
 }
 
 
@@ -67,17 +83,19 @@ void fondo() {
         fill (0);
         stroke (130);
         rect (DX + i, DY+j, l, h);
-       }
-     }
+      }
+    }
   }
 }
 
 void Jugador() {
-  if ((P[0][2] == 0) && (P[0][1] == 0) && (P[1][1] == 0)) {
-       R = int (random (0, 7)); 
-  
-    switch (R) {
-      case 0: // pieza en L E1(naranja)
+  if (nuevapieza==true)
+  {
+    DADO = int (random (0, 7));
+    nuevapieza=false;
+
+    switch (DADO) {
+    case 0: // pieza en L E1(naranja)
 
       P[1][0] = 1;
       P[1][1] = 1;
@@ -88,7 +106,7 @@ void Jugador() {
       b = 32;
       break;
 
-    //// pieza L invertida (azul)
+      //// pieza L invertida (azul)
     case 1: // E1
       P[2][0] = 1;
       P[2][1] = 1;
@@ -98,8 +116,8 @@ void Jugador() {
       g = 0;
       b = 255;
       break;
-  
-    // Z Invertida roja
+
+      // Z Invertida roja
     case 2: // pieza Z invertida E1(roja)
       P[0][1] = 1;
       P[1][1] = 1;
@@ -111,7 +129,7 @@ void Jugador() {
       break;
 
 
-    // T violeta
+      // T violeta
     case 3: // pieza T E1(violeta)
       P[0][1] = 1;
       P[1][1] = 1;
@@ -123,7 +141,7 @@ void Jugador() {
       break;
 
 
-    // pieza | (palito) E1(celeste)
+      // pieza | (palito) E1(celeste)
     case 4:
       P[1][0] = 1;
       P[1][1] = 1;
@@ -135,7 +153,7 @@ void Jugador() {
       break;
 
 
-    // pieza cuadrado # E1 (es un cuadrado el hastag) (amarrillo)
+      // pieza cuadrado # E1 (es un cuadrado el hastag) (amarrillo)
     case 5:
       P[1][0] = 1;
       P[2][0] = 1;
@@ -145,54 +163,52 @@ void Jugador() {
       g = 255;
       b = 0;
       break;
-      
     }
-    }
-  dibujapieza(r,g,b);
+  }
+  dibujapieza(r, g, b);
+  t++;
 }
 
-void dibujapieza(float rojo,float verde,float azul){
-  
-  if(h*t<=513)
-  {  
+void dibujapieza(float rojo, float verde, float azul) {
+
+  if (h*t<=513)
+  {
     pushMatrix();
-      
-       translate(l*mx,h*t);
-        if (giro==true)
-       {
-         rotate(90);
-         giro=false;
-       }
-       for(i=0;i<4;i++){
-          for(j=0;j<4;j++){
-             
-            if(P[i][j]==1){
-              fill(rojo,verde,azul);
-            }
-            rect(DX, DY, l*i, h*j);
-             
-          }
-       }
-     popMatrix();
-  }else{
+
+    translate(l*mx, h*t);
+    if (giro==true)
+    {
+      rotate(90);
+      giro=false;
+    }
+    for (i=0; i<4; i++) {
+      for (j=0; j<4; j++) {
+
+        if (P[i][j]==1) {
+          fill(rojo, verde, azul);
+        }
+        rect(DX, DY, l*i, h*j);
+      }
+    }
+    popMatrix();
+  } else {
     t=-1;
+    nuevapieza=true;
+    test=false;
   }
-   
-     
 }
 
 void keyPressed() {
-  if ((key =='w') || (key =='W')) giro=true; 
+  if ((key =='w') || (key =='W')) giro=true;
   else if ((key =='A') || (key =='a')) mx--;
   else if ((key =='d') || (key =='D')) mx++;
-  
+
   delimitadores();
-  
 }
-  
-  
+
+
 void delimitadores()
 {
   if (mx<=0) mx=0;
-  if(mx>=9) mx=9;
+  if (mx>=9) mx=9;
 }
