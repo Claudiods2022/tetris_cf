@@ -1,1 +1,14 @@
-primero
+mejoras:
+
+27/11/2022:
+	-se quito la funcion de limpiarpieza ya que no se precisa al redibujar
+	-se recupero las matrices de las piezas como las tenian antes.
+	-se creo el modo test.
+	-se explico el funcionamiento de sensores y su control en alturas.
+	-se corrigieron el sistema de dibujado de piezas.
+	
+*Extra tests:
+	-a modo de evaluacion quise probar que no se traslade colocando una variable vy que al ser 0 no se desplase. 
+		De esta forma ahora tambien se puede mover la pieza a velocidades variables.
+	-en keyPressed se agrego la tecla 's' o 'S' (si se presiona este boton la velocidad vertical se duplica con la variable vy).
+	-de esta forma la ecuacion de desplazamiento en traslacion seria (h*t*vy)
