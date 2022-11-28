@@ -1,4 +1,12 @@
-mejoras:
+Asistencia a alumnos:
+-Natasha
+-Luciana
+-Kevin
+-Javier
+
+
+Tetris_cf:
+
 
 27/11/2022:
 	-se quito la funcion de limpiarpieza ya que no se precisa al redibujar
@@ -12,3 +20,28 @@ mejoras:
 		De esta forma ahora tambien se puede mover la pieza a velocidades variables.
 	-en keyPressed se agrego la tecla 's' o 'S' (si se presiona este boton la velocidad vertical se duplica con la variable vy).
 	-de esta forma la ecuacion de desplazamiento en traslacion seria (h*t*vy)
+
+28/11/2022:
+	-Se elimino la Matriz M.
+	-se explico como gira la matriz rotandola un valor entero, cada vez que se presiona la tecla W se multiplica  un entero por 90 grados la poscicion de la pieza.
+	-se agrego la variable giro por que por error se estaba usando la variable global r.
+	-se alineo la figura con la matriz de testeo.
+	-se logro que los sensores detecten la precensia de las figuras por un metodo de deteccion de color.}
+	
+Faltaria;
+	
+	-que los sensores se modifiquen segun la altura del terreno.
+	-sistema de puntajes y texto general.
+	-un administrador de sonido.
+	
+	-que las figuras pasen al fondo al ser detectadas por algun sensor.
+	-Que las figuras logren borrarse al completar una linea.
+	-que las figuras no salgan por los bordes de la pantalla. 
+
+	-sistemas de niveles de testeo.
+	-arreglar toda variable que innecesariamente sea global.
+	
+*Extra test:
+	-a modo de experimento voy a mostrarles un metodo de rotacion de matrices que mejora el que procesing les permite hacer.
+	-lo veo como la solucion mas rapida y sensilla al problema de rotacion que tienen actualmente.
+	
