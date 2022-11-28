@@ -1,10 +1,13 @@
 //variables dimensionales
 int l, h, DX, DY, L, H;
+
 int P[][]=new int[4][4];
+
+
 int M[][]= new int [10][20];
 
 // variables usuario;
-int mx=0,t=0,giro=0;
+int mx=0,t=0,giro=0,my=0;
 float r=0,g=0, b=0,vy=1;
 boolean nuevapieza=false; 
 
@@ -83,11 +86,18 @@ boolean sensado(){
          
       //Solucion temporal por que se debe analizar una solucion mas compleja donde intervienen las formas de las piezas;
       toque=false;
-      if(h*sensores[c]==h*t)
+      if(sensores[c]==t)
       {
          toque=true;
          break;
       }
+    }
+    
+    for(int j=1;j<21;j++)
+    {
+       fill(255);     
+       rect (DX+l*1, h*j*P[1][2], l, h);
+       
     }
    popMatrix();
 
@@ -101,6 +111,9 @@ void mensajes()
   fill(255);
   textSize(30);
   text("("+mx+","+(h*t)+")", 0, 20);
+  text(hex(get(mouseX,mouseY)),0,60);
+  
+ // text("DIST0:"+(sensores[1]-t),0,60);
   popMatrix();
 }
 
@@ -137,7 +150,7 @@ void Jugador() {
   if (nuevapieza==true)
   {
      int DADO =(int) random (0, 5);
-    
+    DADO=0;
     nuevapieza=false;
 
     switch (DADO) {
@@ -223,7 +236,7 @@ void dibujapieza(float rojo, float verde, float azul)
    if(sensado()==false)
     { 
        pushMatrix();
-         translate(5+DX+l*mx,DY+h*t*vy);
+         translate(DX+l*mx,DY+h*vy);
          rotate(PI/2*giro);   
      
       for (int i=0; i<4; i++) 
@@ -235,7 +248,7 @@ void dibujapieza(float rojo, float verde, float azul)
             
               if (P[i][j]==1) fill(rojo, verde, azul);
               text(P[i][j],l*i,h*j);
-              if(P[i][j]==1) rect (l*i, h*j, l, h);
+              if(P[i][j]==1) rect (l*i, h*(j-1), l, h);
               
         }   
       }
