@@ -4,14 +4,13 @@ int P[][]=new int[4][4];
 int M[][]= new int [10][20];
 
 // variables usuario;
-int mx=0,t=0;
-float r=0, g=0, b=0,vy=1;
+int mx=0,t=0,giro=0;
+float r=0,g=0, b=0,vy=1;
 boolean nuevapieza=false; 
 
 
 // variables pruebas
 boolean test=true;
-
 int sensores[]={21,21,21,21,21,21,21,21,21,21};
 
 
@@ -20,7 +19,7 @@ int sensores[]={21,21,21,21,21,21,21,21,21,21};
 
 void setup () {
   frameRate(8);
-  smooth();
+//  smooth();
   size (600, 600);
   background (255);
   DX = (width* 25)/ 100;
@@ -39,6 +38,8 @@ void draw () {
     
     background(0);
     fondo();
+    sensado();
+
     if(test==true) Jugador();
     else dibutest();            //dibujo estatico de la pieza
     mensajes(); 
@@ -57,7 +58,6 @@ void dibutest()
         
         for (int j=0; j<4; j++) 
         {
-            fill(255);
             
               if (P[i][j]==1) fill(100);
               text(P[i][j],l*i,h*j);
@@ -66,10 +66,11 @@ void dibutest()
         }   
       }
       
-       popMatrix();      
+    popMatrix();      
 }
 
 boolean sensado(){
+
     pushMatrix();
     boolean toque=false;
     fill(255);
@@ -78,7 +79,6 @@ boolean sensado(){
     {
       if (test==true) text("T",DX+5+l*c,h*(sensores[c]));
       else text("F",DX+5+l*c,h*l*c,h*(sensores[c]));
-      if(h*t==h*sensores[c])
          
          
       //Solucion temporal por que se debe analizar una solucion mas compleja donde intervienen las formas de las piezas;
@@ -92,6 +92,7 @@ boolean sensado(){
    popMatrix();
 
    return toque;
+   
 }
 
 void mensajes()
@@ -223,7 +224,7 @@ void dibujapieza(float rojo, float verde, float azul)
     { 
        pushMatrix();
          translate(5+DX+l*mx,DY+h*t*vy);
-         rotate(PI/2*r);   
+         rotate(PI/2*giro);   
      
       for (int i=0; i<4; i++) 
       {
@@ -254,15 +255,16 @@ void dibujapieza(float rojo, float verde, float azul)
 }
 
 void keyReleased() {
-  if ((key =='w') || (key =='W'))r++;
-  
+  if ((key =='w') || (key =='W'))giro++;
+  if(giro==4) giro=0;
+  vy=1;
 }
 
 void keyPressed()
 {
   if ((key =='A') || (key =='a')) mx--;
   else if ((key =='d') || (key =='D')) mx++;
-  else if ((key=='s') || (key=='s')) vy=2;
+  else if ((key=='s') || (key=='S')) vy=2;
   delimitadores();
  
 }
