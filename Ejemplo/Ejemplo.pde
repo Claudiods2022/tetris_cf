@@ -4,7 +4,6 @@ int l, h, DX, DY, L, H;
 
 
 // variables usuario;
-
 int mx=0,t=0,giro=0;
 float r=0,g=0, b=0,vy=1;
 boolean nuevapieza=false; 
