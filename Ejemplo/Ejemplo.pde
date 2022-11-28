@@ -3,11 +3,9 @@ int P[][]=new int[4][4];
 int l, h, DX, DY, L, H;
 
 
-
-
-
 // variables usuario;
-int mx=0,t=0,giro=0,my=0;
+
+int mx=0,t=0,giro=0;
 float r=0,g=0, b=0,vy=1;
 boolean nuevapieza=false; 
 
@@ -26,9 +24,9 @@ int noventa[][]={{1, 0,0,0},
 
 
 void setup () {
-  frameRate(8);
-//  smooth();
+  
   size (600, 600);
+  smooth();
   background (255);
   DX = (width* 25)/ 100;
   DY = (height * 5)/ 100;
@@ -44,16 +42,19 @@ void setup () {
 
 void draw () {
     
-    background(0);
-    fondo();
-    sensado();
-
-    if(test==true) Jugador();
-    else dibutest();            //dibujo estatico de la pieza
-    mensajes(); 
+    if(frameCount%8==0)
+    {
+      background(0);
+      fondo();
+      if(test==true) Jugador();
+      else dibutest();            
+    }
+    mensajes();
     
      
 }
+
+
 
 void dibutest()
 {
@@ -83,13 +84,11 @@ boolean sensado(){
       boolean toque=false;
       fill(255);
       textSize(30);
-      int aux=get(DX+1*l,DY+sensores[1]*h);
       for(int c=0;c<10;c++)
       {
           
-        if(get(DX+1*l,DY+sensores[1]*h)!=aux)
+        if(get(DX+c*l,DY+sensores[c]*h)!=#FF000000)
         {
-         
            toque=true;
            break;
         }
@@ -109,7 +108,8 @@ void mensajes()
   fill(255);
   textSize(30);
   text("("+mx+","+(h*t)+")", 0, 20);
-  text(hex(get(DX+1*l,DY+sensores[1]*h)),0,60);
+  
+// text(hex(get(DX+1*l,DY+sensores[1]*h)),0,60);
   popMatrix();
 }
 
@@ -134,8 +134,7 @@ void fondo() {
 void Jugador() {
   if (nuevapieza==true)
   {
-     int DADO =(int) random (0, 5);
-    DADO=0;
+    int DADO =(int) random (0, 5);
     nuevapieza=false;
 
     switch (DADO) {
@@ -218,9 +217,7 @@ void Jugador() {
 
 void dibujapieza(float rojo, float verde, float azul) 
 {
-   if(sensado()==false)
-   { 
-       pushMatrix();
+   pushMatrix();
          translate(DX+l*mx,DY+h*t*vy);
          rotate(PI/2*giro);   
      
@@ -238,10 +235,11 @@ void dibujapieza(float rojo, float verde, float azul)
           }   
         }
       
-       popMatrix();      
+   popMatrix();      
     
-   }else{
-    //t=-1;
+   if(sensado()==true)
+   { 
+    t=t-1;
     vy=0;
     nuevapieza=true;
     test=false;
