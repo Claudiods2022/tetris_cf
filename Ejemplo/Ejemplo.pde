@@ -8,10 +8,11 @@ int mx=0,t=0;
 float r=0, g=0, b=0,vy=1;
 boolean nuevapieza=false; 
 
+
 // variables pruebas
 boolean test=true;
-boolean giro=false;
-int sensores[]={0,0,0,0,0,0,0,0,0,0};
+
+int sensores[]={21,21,21,21,21,21,21,21,21,21};
 
 
 
@@ -19,6 +20,7 @@ int sensores[]={0,0,0,0,0,0,0,0,0,0};
 
 void setup () {
   frameRate(8);
+  smooth();
   size (600, 600);
   background (255);
   DX = (width* 25)/ 100;
@@ -34,40 +36,76 @@ void setup () {
 
 
 void draw () {
-  //  pantalla ();
-  if(test==true)
-  {
+    
     background(0);
-    fondo();  
-    if (test==true) Jugador();
-    sensados();
-    mensajes();
-  }
+    fondo();
+    if(test==true) Jugador();
+    else dibutest();            //dibujo estatico de la pieza
+    mensajes(); 
+    
+     
 }
 
-
-void sensados(){
+void dibutest()
+{
    pushMatrix();
+         translate(DX+l*mx,DY+h*(t-2));
+         rotate(PI/2*r);   
+     
+      for (int i=0; i<4; i++) 
+      {
+        
+        for (int j=0; j<4; j++) 
+        {
+            fill(255);
+            
+              if (P[i][j]==1) fill(100);
+              text(P[i][j],l*i,h*j);
+              if(P[i][j]==1) rect (l*i, h*j, l, h);
+              
+        }   
+      }
+      
+       popMatrix();      
+}
+
+boolean sensado(){
+    pushMatrix();
+    boolean toque=false;
     fill(255);
     textSize(30);
     for(int c=0;c<10;c++)
     {
-      if (test==true) text("T",DX+5+l*c,h*(21-sensores[c]));
-      else text("F",DX+5+l*c,h*l*c,h*(21-sensores[c]));
+      if (test==true) text("T",DX+5+l*c,h*(sensores[c]));
+      else text("F",DX+5+l*c,h*l*c,h*(sensores[c]));
+      if(h*t==h*sensores[c])
+         
+         
+      //Solucion temporal por que se debe analizar una solucion mas compleja donde intervienen las formas de las piezas;
+      toque=false;
+      if(h*sensores[c]==h*t)
+      {
+         toque=true;
+         break;
+      }
     }
    popMatrix();
+
+   return toque;
 }
 
 void mensajes()
 {
+  pushMatrix();
+  fill(255);
   textSize(30);
   text("("+mx+","+(h*t)+")", 0, 20);
+  popMatrix();
 }
 
 
 
-void limpiar () {
-  
+void limpiar () {  
   for (int i=0; i<20; i++) {
     for (int j=0; j<10; j++) {
       M[j][i] = 0;
@@ -78,23 +116,26 @@ void limpiar () {
 
 
 void fondo() {
+  pushMatrix();
+  translate(0,0);
   fill (155);
   quad (DX-20, DY-20, DX+L+20, DY-20, DX+L+20, DY+H+20, DX-20, DY+H+20);
   for (int i = 0; i < 10*l; i = i +l) { /* for para dibujar cada columna*/
     for (int j=0; j<20 *h; j = j + h) {/* for para dibujar cada fila */
-      if (M [i/l] [j/h] == 0) { /* si es == 0 es porque no hay una pieza ahi. */
+      if (M [i/l] [j/h] == 0) { 
         fill (0);
         stroke (130);
         rect (DX + i, DY+j, l, h);
       }
     }
   }
+  popMatrix();
 }
 
 void Jugador() {
   if (nuevapieza==true)
   {
-    int DADO = int (random (0, 5));
+     int DADO =(int) random (0, 5);
     
     nuevapieza=false;
 
@@ -171,52 +212,59 @@ void Jugador() {
   }
   
   dibujapieza(r, g, b);
-    
   
   t++;
 
 }
 
-void dibujapieza(float rojo, float verde, float azul) {
-
-  if (h*t<=h*18)
-  {
-    pushMatrix();
-
-    if (giro==true)
-    {
-      rotate(90);
-      giro=false;
-    }
-    translate(l*mx, h*t*vy);
-    
-    for (int i=0; i<4; i++) {
-      for (int j=0; j<4; j++) {
-        fill(255);
-        if (P[i][j]==0)
+void dibujapieza(float rojo, float verde, float azul) 
+{
+   if(sensado()==false)
+    { 
+       pushMatrix();
+         translate(5+DX+l*mx,DY+h*t*vy);
+         rotate(PI/2*r);   
+     
+      for (int i=0; i<4; i++) 
+      {
+        
+        for (int j=0; j<4; j++) 
         {
-              text("0",DX+l*i,h*j);
-        }else{
-              fill(rojo, verde, azul);
-              text("1",DX+l*i,h*j);
-        }  
+            fill(255);
+            
+              if (P[i][j]==1) fill(rojo, verde, azul);
+              text(P[i][j],l*i,h*j);
+              if(P[i][j]==1) rect (l*i, h*j, l, h);
+              
+        }   
       }
-    }
+      
+       popMatrix();      
     
-    popMatrix();
-  } else {
-    t=-1;
+  }else
+  {
+    //t=-1;
+    vy=0;
     nuevapieza=true;
     test=false;
   }
+  
+  
+  
 }
 
-void keyPressed() {
-  if ((key =='w') || (key =='W')) giro=true;
-  else if ((key =='A') || (key =='a')) mx--;
+void keyReleased() {
+  if ((key =='w') || (key =='W'))r++;
+  
+}
+
+void keyPressed()
+{
+  if ((key =='A') || (key =='a')) mx--;
   else if ((key =='d') || (key =='D')) mx++;
   else if ((key=='s') || (key=='s')) vy=2;
   delimitadores();
+ 
 }
 
 
