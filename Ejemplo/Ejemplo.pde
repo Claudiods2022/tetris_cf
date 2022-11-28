@@ -1,10 +1,10 @@
 //variables dimensionales
+int P[][]=new int[4][4];
 int l, h, DX, DY, L, H;
 
-int P[][]=new int[4][4];
 
 
-int M[][]= new int [10][20];
+
 
 // variables usuario;
 int mx=0,t=0,giro=0,my=0;
@@ -15,6 +15,11 @@ boolean nuevapieza=false;
 // variables pruebas
 boolean test=true;
 int sensores[]={21,21,21,21,21,21,21,21,21,21};
+
+int noventa[][]={{1, 0,0,0},
+                 {0, 0,1,0},
+                 {0,-1,0,1}
+                 };
 
 
 
@@ -32,7 +37,7 @@ void setup () {
   l = L / 10; /* ancho y largo de cuadrados chiquitos */
   h = H / 20; /* L --> long, H --> high */
 
-  limpiar();
+
   nuevapieza=true;
 }
 
@@ -75,30 +80,23 @@ void dibutest()
 boolean sensado(){
 
     pushMatrix();
-    boolean toque=false;
-    fill(255);
-    textSize(30);
-    for(int c=0;c<10;c++)
-    {
-      if (test==true) text("T",DX+5+l*c,h*(sensores[c]));
-      else text("F",DX+5+l*c,h*l*c,h*(sensores[c]));
-         
-         
-      //Solucion temporal por que se debe analizar una solucion mas compleja donde intervienen las formas de las piezas;
-      toque=false;
-      if(sensores[c]==t)
+      boolean toque=false;
+      fill(255);
+      textSize(30);
+      int aux=get(DX+1*l,DY+sensores[1]*h);
+      for(int c=0;c<10;c++)
       {
-         toque=true;
-         break;
-      }
+          
+        if(get(DX+1*l,DY+sensores[1]*h)!=aux)
+        {
+         
+           toque=true;
+           break;
+        }
+        
     }
-    
-    for(int j=1;j<21;j++)
-    {
-       fill(255);     
-       rect (DX+l*1, h*j*P[1][2], l, h);
-       
-    }
+
+
    popMatrix();
 
    return toque;
@@ -111,21 +109,10 @@ void mensajes()
   fill(255);
   textSize(30);
   text("("+mx+","+(h*t)+")", 0, 20);
-  text(hex(get(mouseX,mouseY)),0,60);
-  
- // text("DIST0:"+(sensores[1]-t),0,60);
+  text(hex(get(DX+1*l,DY+sensores[1]*h)),0,60);
   popMatrix();
 }
 
-
-
-void limpiar () {  
-  for (int i=0; i<20; i++) {
-    for (int j=0; j<10; j++) {
-      M[j][i] = 0;
-    }
-  }
-}
 
 
 
@@ -136,11 +123,9 @@ void fondo() {
   quad (DX-20, DY-20, DX+L+20, DY-20, DX+L+20, DY+H+20, DX-20, DY+H+20);
   for (int i = 0; i < 10*l; i = i +l) { /* for para dibujar cada columna*/
     for (int j=0; j<20 *h; j = j + h) {/* for para dibujar cada fila */
-      if (M [i/l] [j/h] == 0) { 
         fill (0);
         stroke (130);
-        rect (DX + i, DY+j, l, h);
-      }
+        rect (DX + i, DY+j, l, h);     
     }
   }
   popMatrix();
@@ -234,34 +219,33 @@ void Jugador() {
 void dibujapieza(float rojo, float verde, float azul) 
 {
    if(sensado()==false)
-    { 
+   { 
        pushMatrix();
-         translate(DX+l*mx,DY+h*vy);
+         translate(DX+l*mx,DY+h*t*vy);
          rotate(PI/2*giro);   
      
-      for (int i=0; i<4; i++) 
-      {
-        
-        for (int j=0; j<4; j++) 
+        for (int i=0; i<4; i++) 
         {
+        
+          for (int j=0; j<4; j++) 
+          {
             fill(255);
             
               if (P[i][j]==1) fill(rojo, verde, azul);
               text(P[i][j],l*i,h*j);
               if(P[i][j]==1) rect (l*i, h*(j-1), l, h);
               
-        }   
-      }
+          }   
+        }
       
        popMatrix();      
     
-  }else
-  {
+   }else{
     //t=-1;
     vy=0;
     nuevapieza=true;
     test=false;
-  }
+   }
   
   
   
@@ -288,3 +272,20 @@ void delimitadores()
   if (mx<=0) mx=0;
   if (mx>=9) mx=9;
 }
+
+
+boolean multimatiz(int[][] a,int[][] b)
+{
+  int[][] c=new int[3][3];
+  for(int i=0;i<3;i++){    
+    for(int j=0;j<3;j++){    
+      c[i][j]=0;      
+      for(int k=0;k<3;k++)      
+      {      
+        c[i][j]+=a[i][k]*b[k][j];      
+      }  
+    }  
+       
+  }
+  return false;
+}  
