@@ -2,10 +2,13 @@
 int P[][]=new int[4][4];
 int l, h, DX, DY, L, H;
 
+//variable de juego
+int st;
 
 // variables usuario;
-int mx=0,t=0,giro=0;
-float r=0,g=0, b=0,vy=1;
+int mx=0,t=0,giro=0,vy=1;
+float r,g,b;
+ 
 boolean nuevapieza=false; 
 
 
@@ -13,10 +16,10 @@ boolean nuevapieza=false;
 boolean test=true;
 int sensores[]={21,21,21,21,21,21,21,21,21,21};
 
-int noventa[][]={{1, 0,0,0},
-                 {0, 0,1,0},
-                 {0,-1,0,1}
-                 };
+float R[][]={ { 0, 0, 1, 0},
+              { 0, 1, 0, 0},
+              { 1, 0, 0, 0},
+              { 0, 0, 0, 1}};
 
 
 
@@ -30,9 +33,8 @@ void setup () {
   DX = (width* 25)/ 100;
   DY = (height * 5)/ 100;
   L = width - 2 * DX;
-  H = height - 2 * DY; /* pantalla azul rect grande */
-  l = L / 10; /* ancho y largo de cuadrados chiquitos */
-  h = H / 20; /* L --> long, H --> high */
+  H = height - 2 * DY;   l = L / 10; 
+  h = H / 20; 
 
 
   nuevapieza=true;
@@ -41,15 +43,13 @@ void setup () {
 
 void draw () {
     
-    if(frameCount%8==0)
-    {
-      background(0);
-      fondo();
-      if(test==true) Jugador();
-      else dibutest();            
-    }
+    background(0);
+    fondo();
+    if(test==true) Jugador();
+    else dibutest();            
     mensajes();
-    
+
+    if(frameCount%10==0) t++;
      
 }
 
@@ -58,9 +58,8 @@ void draw () {
 void dibutest()
 {
    pushMatrix();
-         translate(DX+l*mx,DY+h*(t-2));
-         rotate(PI/2*r);   
-     
+      translate(DX+l*mx,DY+h*(st-1));   
+      
       for (int i=0; i<4; i++) 
       {
         
@@ -68,7 +67,7 @@ void dibutest()
         {
             
               if (P[i][j]==1) fill(100);
-              text(P[i][j],l*i,h*j);
+              text(P[i][j],l*i,h*(j-1));
               if(P[i][j]==1) rect (l*i, h*j, l, h);
               
         }   
@@ -78,23 +77,22 @@ void dibutest()
 }
 
 boolean sensado(){
-
-    pushMatrix();
-      boolean toque=false;
-      fill(255);
-      textSize(30);
-      for(int c=0;c<10;c++)
-      {
-          
-        if(get(DX+c*l,DY+sensores[c]*h)!=#FF000000)
-        {
-           toque=true;
-           break;
-        }
-        
+  
+   boolean toque=false;
+   
+   pushMatrix();
+   fill(255);
+   textSize(30);
+   for(int c=0;c<10;c++)
+   { 
+     
+     if(get(DX+c*l,DY+sensores[c]*h)!=#FF000000)
+     {
+       toque=true;
+       break;
+     }
+     
     }
-
-
    popMatrix();
 
    return toque;
@@ -106,9 +104,9 @@ void mensajes()
   pushMatrix();
   fill(255);
   textSize(30);
-  text("("+mx+","+(h*t)+")", 0, 20);
+  text("("+mx+","+(h*t*vy)+")", 0, 20);
+  text(giro, 0, 60);
   
-// text(hex(get(DX+1*l,DY+sensores[1]*h)),0,60);
   popMatrix();
 }
 
@@ -117,25 +115,27 @@ void mensajes()
 
 void fondo() {
   pushMatrix();
-  translate(0,0);
   fill (155);
   quad (DX-20, DY-20, DX+L+20, DY-20, DX+L+20, DY+H+20, DX-20, DY+H+20);
   for (int i = 0; i < 10*l; i = i +l) { /* for para dibujar cada columna*/
+    
     for (int j=0; j<20 *h; j = j + h) {/* for para dibujar cada fila */
         fill (0);
         stroke (130);
         rect (DX + i, DY+j, l, h);     
     }
+    
   }
   popMatrix();
 }
 
 void Jugador() {
+  
   if (nuevapieza==true)
   {
-    int DADO =(int) random (0, 5);
+    int DADO =(int) random(0, 5);
     nuevapieza=false;
-
+    vy=1;
     switch (DADO) {
       
       case 0: // pieza en L E1(naranja)
@@ -206,40 +206,37 @@ void Jugador() {
       b = 0;
       break;
     }
+    
   }
   
   dibujapieza(r, g, b);
   
-  t++;
 
 }
 
 void dibujapieza(float rojo, float verde, float azul) 
 {
    pushMatrix();
-         translate(DX+l*mx,DY+h*t*vy);
-         rotate(PI/2*giro);   
-     
-        for (int i=0; i<4; i++) 
-        {
-        
-          for (int j=0; j<4; j++) 
-          {
-            fill(255);
-            
-              if (P[i][j]==1) fill(rojo, verde, azul);
-              text(P[i][j],l*i,h*j);
-              if(P[i][j]==1) rect (l*i, h*(j-1), l, h);
-              
-          }   
-        }
-      
+   translate(DX+l*mx,DY+h*t*vy);
+   for (int i=0; i<4; i++) 
+   { 
+     for (int j=0; j<4; j++) 
+     {
+    
+       fill(255);
+       if (P[i][j]==1)
+       {
+         fill(rojo, verde, azul);
+         rect(l*i, h*(j-1), l, h);
+       }
+       if (test==true)text(P[i][j],l*i,h*j);       
+     }   
+   }   
    popMatrix();      
     
    if(sensado()==true)
    { 
-    t=t-1;
-    vy=0;
+    st=t-1;
     nuevapieza=true;
     test=false;
    }
@@ -249,9 +246,22 @@ void dibujapieza(float rojo, float verde, float azul)
 }
 
 void keyReleased() {
-  if ((key =='w') || (key =='W'))giro++;
-  if(giro==4) giro=0;
-  vy=1;
+  if ((key =='w') || (key =='W'))
+  {
+    switch(giro)
+    {
+      case 0:
+        
+        P=Tmat(P);
+        giro=1;
+        break;
+      case 1:
+        P=Rmat(P);
+        giro=0;
+        break;
+    }
+  }
+  
 }
 
 void keyPressed()
@@ -259,6 +269,7 @@ void keyPressed()
   if ((key =='A') || (key =='a')) mx--;
   else if ((key =='d') || (key =='D')) mx++;
   else if ((key=='s') || (key=='S')) vy=2;
+  else vy=1;
   delimitadores();
  
 }
@@ -267,22 +278,35 @@ void keyPressed()
 void delimitadores()
 {
   if (mx<=0) mx=0;
-  if (mx>=9) mx=9;
+  if (mx>=6) mx=6;
 }
 
 
-boolean multimatiz(int[][] a,int[][] b)
+int[][] Rmat(int[][] a)
 {
-  int[][] c=new int[3][3];
-  for(int i=0;i<3;i++){    
-    for(int j=0;j<3;j++){    
+  int[][] c=new int[4][4];
+  for(int i=0;i<4;i++){    
+    for(int j=0;j<4;j++){    
       c[i][j]=0;      
-      for(int k=0;k<3;k++)      
+      for(int k=0;k<4;k++)      
       {      
-        c[i][j]+=a[i][k]*b[k][j];      
+        c[i][j]+=R[i][k]*a[k][j];      
       }  
     }  
        
   }
-  return false;
+  return c;
+}  
+
+int[][] Tmat(int[][] a)
+{
+  int[][] c=new int[4][4];
+  for(int i=0;i<4;i++){    
+    for(int j=0;j<4;j++)
+    {                
+        c[i][j]+=a[j][i];      
+     }    
+       
+  }
+  return c;
 }  
