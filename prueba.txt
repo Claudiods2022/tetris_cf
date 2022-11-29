@@ -43,5 +43,5 @@ Faltaria;
 	
 *Extra test:
 	-a modo de experimento voy a mostrarles un metodo de rotacion de matrices que mejora el que procesing les permite hacer.
-	-lo veo como la solucion mas rapida y sensilla al problema de rotacion que tienen actualmente.
+	-lo veo como la solucion mas rapida y sencilla al problema de rotacion que tienen actualmente.
 	
