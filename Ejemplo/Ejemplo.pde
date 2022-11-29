@@ -13,7 +13,7 @@ boolean nuevapieza=false;
 
 
 // variables pruebas
-boolean test=true;
+boolean test=false;
 int sensores[]={19,19,19,19,19,19,19,19,19,19};
 
 float R[][]={ { 0, 0, 1, 0},
@@ -23,7 +23,7 @@ float R[][]={ { 0, 0, 1, 0},
 
 
 
-
+enum tipo{fondo,pieza}
 
 void setup () {
   
@@ -43,6 +43,7 @@ void setup () {
   
 
   nuevapieza=true;
+  vy=1;
 }
 
 
@@ -50,7 +51,7 @@ void draw () {
     
     background(0);
     fondo();
-    if(test==true) Jugador();            
+    Jugador();            
     mensajes();
 
     if(frameCount%10==0) t++;
@@ -66,11 +67,13 @@ void fondo() {
     for (int j=0;j<20;j++) 
     {/* for para dibujar cada fila */
         
-        fill(255);
-        text(fondo[i][j],DX+i*l,DY+h*(j));
-        
+        if(test==true)
+        {
+          fill(255);
+          text(fondo[i][j],DX+i*l,DY+h*j);
+        }
         fill(0);
-        //if(fondo[i][j]==1) fill(100);
+        if(fondo[i][j]==1) fill(100);
         stroke (255);  
         rect (DX+i*l, DY+j*h, l, h);
     }
@@ -79,110 +82,13 @@ void fondo() {
   popMatrix();
 }
 
-void mensajes()
-{
-  pushMatrix();
-  fill(255);
-  textSize(30);
-  if(test==true)
-  {  
-    text("("+mouseX+","+mouseY+")", 0, 20);
-    text(hex(get(mouseX,mouseY)), 0, 60);
-    text(hex(get(CX,CY)), 0, 90);
-  }
-  popMatrix();
-}
-
-
-
-boolean sensado(){
-  
-   boolean toque=false;
-   
-   pushMatrix();
-   fill(255);
-   textSize(30);
-   for(int c=0;c<10;c++)
-   { 
-     int aux_x=CX+c*l;
-     int aux_y=CY+sensores[c]*h;
-     if(get(aux_x,aux_y)!=#FF000000)
-     {
-       print(aux_x,aux_y);
-       redibujar();
-       toque=true;
-       break;
-     }
-     
-    }
-   popMatrix();
-
-   return toque;
-   
-}
-
-void redibujar()
-{
-   for(int i=0;i<10;i++)
-   {
-     int ax=CX+i*l;
-     for(int j=0;j<20;j++)
-     {
-         int ay=CY+j*h;
-         if(get(ax,ay)!=#FF000000) fondo[i][j]=1; 
-         else fondo[i][j]=0;
-         
-     }  
-   }
-}
-
-void dibujapieza(float rojo, float verde, float azul) 
-{
-   pushMatrix();
-   translate(DX+l*mx,DY+h*t*vy);
-   for (int i=0; i<4; i++) 
-   { 
-     for (int j=0; j<4; j++) 
-     {
-    
-       fill(255);
-       if (P[i][j]==1)
-       {
-         fill(rojo, verde, azul);
-         rect(l*i, h*(j-1), l, h);
-       }
-       
- 
-       
-       /*
-       Codigo test de pieza
-       if (test==true)text(P[i][j],l*i,h*j);       
-       */
-     
-     }   
-   }   
-   popMatrix();      
-    
-   if(sensado()==true)
-   { 
-    nuevapieza=true;
-    test=false;
-   }
-  
-  
-  
-}
-
-
-
-
-
-
 
 void Jugador() {
   
   if (nuevapieza==true)
   {
+    P=limpiar(P);
+    t=-1;
     int DADO =(int) random(0, 5);
     nuevapieza=false;
     switch (DADO) {
@@ -264,6 +170,108 @@ void Jugador() {
 }
 
 
+
+
+
+
+
+void mensajes()
+{
+  pushMatrix();
+  fill(255);
+  textSize(30);
+  if(test==true)
+  {  
+    text("("+mouseX+","+mouseY+")", 0, 20);
+    text(hex(get(mouseX,mouseY)), 0, 60);
+    text(hex(get(CX,CY)), 0, 90);
+  }
+  popMatrix();
+}
+
+
+
+boolean sensado(){
+  
+   boolean toque=false;
+   
+   pushMatrix();
+   fill(255);
+   textSize(30);
+   for(int c=0;c<10;c++)
+   { 
+     int aux_x=CX+c*l;
+     int aux_y=CY+sensores[c]*h;
+     if(get(aux_x,aux_y)!=#FF000000)
+     {
+       print(aux_x,aux_y);
+       actualizar_mapa();
+       toque=true;
+       break;
+     }
+     
+    }
+   popMatrix();
+
+   return toque;
+   
+}
+
+void actualizar_mapa()
+{
+   for(int i=0;i<10;i++)
+   {
+     int ax=CX+i*l;
+     for(int j=0;j<20;j++)
+     {
+         int ay=CY+j*h;
+         if(get(ax,ay)!=#FF000000) fondo[i][j]=1; 
+         else fondo[i][j]=0;
+         
+     }  
+   }
+}
+
+void dibujapieza(float rojo, float verde, float azul) 
+{
+   pushMatrix();
+   translate(DX+l*mx,DY+h*t*vy);
+   for (int i=0; i<4; i++) 
+   { 
+     for (int j=0; j<4; j++) 
+     {
+    
+       fill(255);
+       if (P[i][j]==1)
+       {
+         fill(rojo, verde, azul);
+         rect(l*i, h*(j-1), l, h);
+       }
+       
+ 
+       
+       /*
+       Codigo test de pieza
+       if (test==true)text(P[i][j],l*i,h*j);       
+       */
+     
+     }   
+   }   
+   popMatrix();      
+    
+   if(sensado()==true)
+   { 
+    nuevapieza=true;
+    test=false;
+   }
+  
+  
+  
+}
+
+
+
+
 void keyReleased() {
   if ((key =='w') || (key =='W'))
   {
@@ -327,4 +335,17 @@ int[][] Tmat(int[][] a)
        
   }
   return c;
-}  
+}
+
+
+int[][] limpiar(int[][] mat)
+{
+ for(int i=0;i<mat.length;i++)
+ {
+   for(int j=0;j<mat[0].length;j++)
+   {
+     mat[i][j]=0;
+   }
+ }
+  return mat;
+}
