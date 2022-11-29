@@ -13,7 +13,7 @@ boolean nuevapieza=false;
 
 
 // variables pruebas
-boolean test=false;
+
 int sensores[]={19,19,19,19,19,19,19,19,19,19};
 
 float R[][]={ { 0, 0, 1, 0},
@@ -67,15 +67,15 @@ void fondo() {
     for (int j=0;j<20;j++) 
     {/* for para dibujar cada fila */
         
-        if(test==true)
-        {
-          fill(255);
-          text(fondo[i][j],DX+i*l,DY+h*j);
-        }
         fill(0);
         if(fondo[i][j]==1) fill(100);
         stroke (255);  
         rect (DX+i*l, DY+j*h, l, h);
+        /*
+        fill(255);
+        text(fondo[i][j],DX+i*l,DY+h*j);
+        */
+        
     }
     
   }
@@ -180,12 +180,10 @@ void mensajes()
   pushMatrix();
   fill(255);
   textSize(30);
-  if(test==true)
-  {  
     text("("+mouseX+","+mouseY+")", 0, 20);
     text(hex(get(mouseX,mouseY)), 0, 60);
     text(hex(get(CX,CY)), 0, 90);
-  }
+  
   popMatrix();
 }
 
@@ -202,9 +200,11 @@ boolean sensado(){
    { 
      int aux_x=CX+c*l;
      int aux_y=CY+sensores[c]*h;
+     
+     if(get(aux_x,aux_y)==#FF646464) continue;  
      if(get(aux_x,aux_y)!=#FF000000)
      {
-       print(aux_x,aux_y);
+       
        actualizar_mapa();
        toque=true;
        break;
@@ -247,14 +247,7 @@ void dibujapieza(float rojo, float verde, float azul)
          fill(rojo, verde, azul);
          rect(l*i, h*(j-1), l, h);
        }
-       
- 
-       
-       /*
-       Codigo test de pieza
-       if (test==true)text(P[i][j],l*i,h*j);       
-       */
-     
+        
      }   
    }   
    popMatrix();      
@@ -262,7 +255,7 @@ void dibujapieza(float rojo, float verde, float azul)
    if(sensado()==true)
    { 
     nuevapieza=true;
-    test=false;
+
    }
   
   
