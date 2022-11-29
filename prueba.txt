@@ -28,20 +28,24 @@ Tetris_cf:
 	-se alineo la figura con la matriz de testeo.
 	-se logro que los sensores detecten la precensia de las figuras por un metodo de deteccion de color.}
 	
-Faltaria;
-	
-	-que los sensores se modifiquen segun la altura del terreno.
-	-sistema de puntajes y texto general.
-	-un administrador de sonido.
-	
-	-que las figuras pasen al fondo al ser detectadas por algun sensor.
-	-Que las figuras logren borrarse al completar una linea.
-	-que las figuras no salgan por los bordes de la pantalla. 
-
-	-sistemas de niveles de testeo.
-	-arreglar toda variable que innecesariamente sea global.
 	
 *Extra test:
 	-a modo de experimento voy a mostrarles un metodo de rotacion de matrices que mejora el que procesing les permite hacer.
 	-lo veo como la solucion mas rapida y sencilla al problema de rotacion que tienen actualmente.
+
+29/11/2022:
+	-se actualiza el mapa del fondo en la medida que las piezas llegan al suelo.
+	-se quitaron todas las expresiones del modo test.	
+	-Las fallas que se producian eran por que las funciones para obtener colores fallaban al tener muchas expresiones matematicas. y junto a eso no se podian determinar bien las coordenadas
+
+Faltaria:
+	-que los sensores se modifiquen segun la altura del terreno.	
+	-sistema de puntajes y texto general.
+	-un administrador de sonido.
+
+	-Que las figuras logren borrarse al completar una linea.
+	-que las figuras no salgan por los bordes de la pantalla. 
 	
+	-sistemas de niveles de testeo.
+	-arreglar toda variable que innecesariamente sea global.
+
