@@ -14,7 +14,7 @@ boolean nuevapieza=false;
 
 // variables pruebas
 
-int sensores[]={19,19,19,19,19,19,19,19,19,19};
+int sensor[]={19,19,19,19,19,19,19,19,19,19};
 
 float R[][]={ { 0, 0, 1, 0},
               { 0, 1, 0, 0},
@@ -69,11 +69,13 @@ void fondo() {
         if(fondo[i][j]==1)fill(100);
         
         stroke (255);  
-        rect (DX+i*l, DY+j*h, l, h);
-        /*
-        fill(255);
-        text(fondo[i][j],DX+i*l,DY+h*j);
-        */
+        int ax=DX+i*l;
+        int ay=DY+j*h;
+        rect (ax, ay, l, h);
+        
+        //fill(255);
+        //text(fondo[i][j],ax,ay);
+        
         
     }
     
@@ -174,7 +176,7 @@ void mensajes()
   pushMatrix();
   fill(255);
   textSize(30);
-    text(sensores[1], 0, 20);
+    //text(sensores[1], 0, 20);
     //text(hex(get(mouseX,mouseY)), 0, 60);
     //text(hex(get(CX,CY)), 0, 90);
   
@@ -193,12 +195,11 @@ boolean sensado(){
    for(int c=0;c<10;c++)
    { 
      int aux_x=CX+c*l;
-     int aux_y=CY+sensores[c]*h;
+     int aux_y=CY+sensor[c]*h;
      
-     if(get(aux_x,aux_y)==#FF646464) continue;  
+     if(get(aux_x,aux_y)==#FF646464)continue;  
      if(get(aux_x,aux_y)!=#FF000000)
      {
-       
        actualizar_mapa();
        toque=true;
        break;
@@ -215,35 +216,33 @@ void actualizar_mapa()
 {
    for(int i=0;i<10;i++)
    {
-     int ax=CX+i*l;
+     
      for(int j=0;j<20;j++)
      {
-         int ay=CY+j*h;
-         if(get(ax,ay)!=#FF000000)fondo[i][j]=1;
-         else fondo[i][j]=0;
+       int ax=CX+i*l;  
+       int ay=CY+j*h;
+       if(get(ax,ay)!=#FF000000)
+       {
+           fondo[i][j]=1;
+           if(sensor[i]>j)sensor[i]=j-1;
+       }else fondo[i][j]=0; 
      }  
    }
    
-   for(int i=0;i<10;i++)
-   {
-     for(int j=0;j<20;j++)
-     {
-         if(fondo[i][j]==1) sensores[i]=j;
-     }  
-   }
+   
    
 }
 
 void dibujapieza(float rojo, float verde, float azul) 
 {
-   pushMatrix();
-   translate(DX+l*mx,DY+h*t*vy);
+  pushMatrix();
+  translate(DX+l*mx,DY+h*t*vy);
    for (int i=0; i<4; i++) 
    { 
      for (int j=0; j<4; j++) 
      {
-    
        fill(255);
+       
        if (P[i][j]==1)
        {
          fill(rojo, verde, azul);
