@@ -19,11 +19,9 @@ int sensores[]={19,19,19,19,19,19,19,19,19,19};
 float R[][]={ { 0, 0, 1, 0},
               { 0, 1, 0, 0},
               { 1, 0, 0, 0},
-              { 0, 0, 0, 1}};
+              { 0, 0, 0, 1}
+            };
 
-
-
-enum tipo{fondo,pieza}
 
 void setup () {
   
@@ -170,19 +168,14 @@ void Jugador() {
 }
 
 
-
-
-
-
-
 void mensajes()
 {
   pushMatrix();
   fill(255);
   textSize(30);
-    text("("+mouseX+","+mouseY+")", 0, 20);
-    text(hex(get(mouseX,mouseY)), 0, 60);
-    text(hex(get(CX,CY)), 0, 90);
+    //text(frameCount, 0, 20);
+    //text(hex(get(mouseX,mouseY)), 0, 60);
+    //text(hex(get(CX,CY)), 0, 90);
   
   popMatrix();
 }
