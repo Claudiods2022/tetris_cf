@@ -66,7 +66,8 @@ void fondo() {
     {/* for para dibujar cada fila */
         
         fill(0);
-        if(fondo[i][j]==1) fill(100);
+        if(fondo[i][j]==1)fill(100);
+        
         stroke (255);  
         rect (DX+i*l, DY+j*h, l, h);
         /*
@@ -173,7 +174,7 @@ void mensajes()
   pushMatrix();
   fill(255);
   textSize(30);
-    //text(frameCount, 0, 20);
+    text(sensores[1], 0, 20);
     //text(hex(get(mouseX,mouseY)), 0, 60);
     //text(hex(get(CX,CY)), 0, 90);
   
@@ -218,11 +219,19 @@ void actualizar_mapa()
      for(int j=0;j<20;j++)
      {
          int ay=CY+j*h;
-         if(get(ax,ay)!=#FF000000) fondo[i][j]=1; 
+         if(get(ax,ay)!=#FF000000)fondo[i][j]=1;
          else fondo[i][j]=0;
-         
      }  
    }
+   
+   for(int i=0;i<10;i++)
+   {
+     for(int j=0;j<20;j++)
+     {
+         if(fondo[i][j]==1) sensores[i]=j;
+     }  
+   }
+   
 }
 
 void dibujapieza(float rojo, float verde, float azul) 
